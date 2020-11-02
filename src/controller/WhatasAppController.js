@@ -122,6 +122,20 @@ class WhatsAppController{
 
         })
 
+        this.el.contactsMessagesList.querySelectorAll('.contact-item').forEach(item=>{
+            item.on('click', e=>{
+                this.el.home.hide()
+                this.el.main.css({
+                    display: 'flex',
+
+                })
+            })
+        })
+
+        this.el.btnAttach.on('click', e=>{
+            this.el.menuAttach.addClass('open')
+        })
+
     }
 
     closeAllLeftPanel(){
