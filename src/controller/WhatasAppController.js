@@ -1,5 +1,6 @@
 import Format from './../util/format'
 import CameraController from './CameraController'
+import DocumentPreviewController from './DocumentPreviewController'
 
 export default class WhatsAppController{
     constructor(){
@@ -177,7 +178,7 @@ export default class WhatsAppController{
             this.el.containerTakePicture.show()
             this.el.containerSendPicture.hide()
         })
-        
+
         this.el.btnSendPicture.on('clcik', e=>{
             console.log(this.el.pictureCamera.src)
         })
@@ -201,7 +202,35 @@ export default class WhatsAppController{
             this.el.panelDocumentPreview.css({
                 'height':'100% '
             })
+            this.el.inputDocument.click()
         })
+
+        this.el.inputDocument.on('change', e=>{
+            if(this.el.inputDocument.files.length){
+                let file = this.el.inputDocument.files[0]
+                this._documentPreviewController = new DocumentPreviewController(file)
+                this._documentPreviewController.getPreviewData().then(result=>{
+                this.el.imgPanelDocumentPreview.src = result.src
+                this.el.infoPanelDocumentPreview.innerHTML = result.info
+                this.el.imagePanelDocumentPreview.show()
+                this.el.filePanelDocumentPreview.hide()
+
+                }).catch(err=>{
+                    switch (file.type) {
+                        case '':
+                        default:
+                            this.el.iconPanelDocumentPreview.className = "jcxhw icon-doc-generic"
+                            
+                            
+                    }
+                    this.el.filenamePanelDocumentPreview.innerHTML = file.name
+                    this.el.imagePanelDocumentPreview.hide()
+                    this.el.filePanelDocumentPreview.show()
+                })
+            }
+
+        })
+
 
         this.el.btnSendDocument.on('click', e=>{
             console.log('send document')
