@@ -1,4 +1,7 @@
-class WhatsAppController{
+import Format from './../util/format'
+import CameraController from './CameraController'
+
+export default class WhatsAppController{
     constructor(){
         console.log('oi')
 
@@ -145,17 +148,38 @@ class WhatsAppController{
             this.el.panelCamera.css({
                 'height':'100% '
             })
+            this._camera = new CameraController(this.el.videoCamera)
         })
 
         this.el.btnClosePanelCamera.on('click', e=>{
             this.closeAllMainPanel()
             this.el.panelMessagesContainer.show()
+            this._camera.stop()
             
 
         })
 
         this.el.btnTakePicture.on('click', e=>{
-            console.log('take picture')
+            let dataUrl = this._camera.takePicture()
+
+            this.el.pictureCamera.src = dataUrl
+            this.el.pictureCamera.show()
+            this.el.videoCamera.hide()
+            this.el.btnReshootPanelCamera.show()
+            this.el.btnTakePicture.hide()
+            this.el.containerSendPicture.show()
+        })
+
+        this.el.btnReshootPanelCamera.on('click', e=>{
+            this.el.pictureCamera.hide()
+            this.el.videoCamera.show()
+            this.el.btnReshootPanelCamera.hide()
+            this.el.containerTakePicture.show()
+            this.el.containerSendPicture.hide()
+        })
+        
+        this.el.btnSendPicture.on('clcik', e=>{
+            console.log(this.el.pictureCamera.src)
         })
 
         this.el.btnAttachPhoto.on('click', e=>{
@@ -163,9 +187,9 @@ class WhatsAppController{
         })
 
         this.el.inputPhoto.on('change', e=>{
-            console.log(this.el.inputPhoto.files)
+            console.log(this.el.inputPhoto.files);
 
-            this.el.inputPhoto.files.forEach(file=>{
+            [...this.el.inputPhoto.files].forEach(file=>{
                 console.log(file)
             })
 
