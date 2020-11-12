@@ -1,6 +1,7 @@
 import Format from './../util/format'
 import CameraController from './CameraController'
 import DocumentPreviewController from './DocumentPreviewController'
+import MicrophoneController from './MicrophoneController'
 
 export default class WhatsAppController{
     constructor(){
@@ -207,20 +208,31 @@ export default class WhatsAppController{
 
         this.el.inputDocument.on('change', e=>{
             if(this.el.inputDocument.files.length){
+                this.el.panelDocumentPreview.css({
+                    'height':'1% '
+                })
                 let file = this.el.inputDocument.files[0]
                 this._documentPreviewController = new DocumentPreviewController(file)
                 this._documentPreviewController.getPreviewData().then(result=>{
+
                 this.el.imgPanelDocumentPreview.src = result.src
                 this.el.infoPanelDocumentPreview.innerHTML = result.info
                 this.el.imagePanelDocumentPreview.show()
                 this.el.filePanelDocumentPreview.hide()
+                this.el.panelDocumentPreview.css({
+                    'height':'100% '
+                })
 
                 }).catch(err=>{
+                    console.log(err)
+                    this.el.panelDocumentPreview.css({
+                        'height':'100% '
+                    })
+                   
                     switch (file.type) {
                         case '':
                         default:
-                            this.el.iconPanelDocumentPreview.className = "jcxhw icon-doc-generic"
-                            
+                            console.log(file.type)                            
                             
                     }
                     this.el.filenamePanelDocumentPreview.innerHTML = file.name
@@ -253,6 +265,8 @@ export default class WhatsAppController{
             this.el.recordMicrophone.show()
             this.el.btnSendMicrophone.hide()
             this.startRecordMicrophoneTime()
+
+            this._microphoneController = new MicrophoneController()
         })
 
         this.el.btnCancelMicrophone.on('click', e=>{
@@ -357,6 +371,7 @@ export default class WhatsAppController{
     }
 
     closeRecordMicrophone(){
+        this._microphoneController.stop()
         this.el.recordMicrophone.hide()
         this.el.btnSendMicrophone.show()
         clearInterval(this.el._recordMicrophoneTimer)
