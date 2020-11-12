@@ -1,3 +1,7 @@
+const pdfjs = require('pdfjs-dist')
+const path = require('path')
+pdfjs.GlobalWorkerOptions.workerSrc = path.resolve(__dirname, '../../dist/pdf.worker.bundle.js')
+
 export default class DocumentPreviewController{
     constructor(file){
         this._file = file
