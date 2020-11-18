@@ -40,6 +40,7 @@ export class User extends Model{
     }
 
     static findByEmail(email){
+        console.log(email)
         return User.getRef().doc(email)
     }
 
@@ -56,7 +57,7 @@ export class User extends Model{
     }
 
     save(){
-        return User.findByEmail(this.email).set(this.toJSON())
+            return User.findByEmail(this.email).set(this.toJSON())
     }
 
 
