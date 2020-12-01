@@ -18,10 +18,6 @@ export class User extends Model{
     set name(value){
         this._data = value
     }
-    
-    get email(){
-        return this._data.email
-    }
 
     set email(value){
         this._data = value
